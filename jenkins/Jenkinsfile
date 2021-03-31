@@ -12,12 +12,12 @@ pipeline {
         }
         stage('CompileSourceCode') {
             steps {
-                mvn compiler:compile
+                mvn -B compiler:compile
             }
         }
          stage('CompileTestCode') {
             steps {
-                mvn compiler:testCompile
+                mvn -B compiler:testCompile
             }
         }
         stage('Build') {
@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                mvn test
+                mvn -B test
             }
             post {
                 always {
