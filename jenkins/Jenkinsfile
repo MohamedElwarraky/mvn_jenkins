@@ -51,19 +51,19 @@ pipeline {
         }
         success {
             echo 'Successfully!'
-            emailext (
-                subject: "Success: Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
-                body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
-                to: "mohamedelwarraky8@gmail.com"
-            )
+            //emailext (
+            //    subject: "Success: Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
+            //    body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
+            //    to: "mohamedelwarraky8@gmail.com"
+            //)
         }
         failure {
             echo 'Failed!'
-            emailext (
-                subject: "Failure : Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
-                body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
-                to: "mohamedelwarraky8@gmail.com"
-            )
+            //emailext (
+            //    subject: "Failure : Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
+            //    body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
+            //    to: "mohamedelwarraky8@gmail.com"
+            //)
         }
         unstable {
             echo 'This will run only if the run was marked as unstable'
