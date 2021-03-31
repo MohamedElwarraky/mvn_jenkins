@@ -4,7 +4,6 @@ pipeline {
         maven 'Maven_3.6.3' 
         jdk 'jdk8' 
     }
-    bat( clean test -Dtest=TestRunner/)
     stages {
         stage('Clean') {
             steps {
