@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
     tools { 
@@ -10,17 +11,14 @@ pipeline {
                 bat 'mvn -B clean'
             }
         }
-        stage('CompileInParallel') {
+        stage('CompileSourceCode') {
             steps {
-                parallel(
-                       CompileSourceCode: {
-                            bat 'mvn -B compiler:compile'
-                          },
-                        CompileTestCode: {
-                            bat 'mvn -B compiler:testCompile'
-                          }
-                        )
-                
+                bat 'mvn -B compiler:compile'
+            }
+        }
+        stage('CompileTestCode') {
+            steps {
+                bat 'mvn -B compiler:testCompile'
             }
         }
         stage('Build') {
