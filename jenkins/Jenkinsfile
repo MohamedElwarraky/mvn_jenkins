@@ -52,7 +52,7 @@ pipeline {
         success {
             echo 'Successfully!'
             emailext (
-                subject: "Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
+                subject: "Success: Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
                 body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
                 to: "mohamedelwarraky8@gmail.com",
                 from: "jenkins@code-maven.com"
@@ -60,6 +60,12 @@ pipeline {
         }
         failure {
             echo 'Failed!'
+            emailext (
+                subject: "Failure : Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
+                body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
+                to: "mohamedelwarraky8@gmail.com",
+                from: "jenkins@code-maven.com"
+            )
         }
         unstable {
             echo 'This will run only if the run was marked as unstable'
