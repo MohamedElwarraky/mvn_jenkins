@@ -48,6 +48,12 @@ pipeline {
         }
         success {
             echo 'Successfully!'
+            emailext (
+                subject: "Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
+                body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
+                to: "mohamedelwarraky8@gmail.com",
+                from: "jenkins@code-maven.com"
+            )
         }
         failure {
             echo 'Failed!'
@@ -60,12 +66,7 @@ pipeline {
             echo 'For example, if the Pipeline was previously failing but is now successful'
         }
     }
-    emailext (
-        subject: "Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
-        body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
-        to: "mohamedelwarraky8@gmail.com",
-        from: "jenkins@code-maven.com"
-    )
+   
 
     // The options directive is for configuration that applies to the whole job.
     options {
