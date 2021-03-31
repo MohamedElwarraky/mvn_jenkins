@@ -5,6 +5,21 @@ pipeline {
         jdk 'jdk8' 
     }
     stages {
+        stage('Clean') {
+            steps {
+                mvn -B clean
+            }
+        }
+        stage('CompileSourceCode') {
+            steps {
+                mvn compiler:compile
+            }
+        }
+         stage('CompileTestCode') {
+            steps {
+                mvn compiler:testCompile
+            }
+        }
         stage('Build') {
             steps {
                 mvn -B -DskipTests package
