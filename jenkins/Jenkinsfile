@@ -4,30 +4,31 @@ pipeline {
         maven 'Maven_3.6.3' 
         jdk 'jdk8' 
     }
+    bat( clean test -Dtest=TestRunner/)
     stages {
         stage('Clean') {
             steps {
-                mvn -B clean
+                bat 'mvn -B clean'
             }
         }
         stage('CompileSourceCode') {
             steps {
-                mvn -B compiler:compile
+                bat 'mvn -B compiler:compile'
             }
         }
          stage('CompileTestCode') {
             steps {
-                mvn -B compiler:testCompile
+                bat 'mvn -B compiler:testCompile'
             }
         }
         stage('Build') {
             steps {
-                mvn -B -DskipTests package
+                bat 'mvn -B -DskipTests package'
             }
         }
         stage('Test') {
             steps {
-                mvn -B test
+                bat 'mvn -B test'
             }
             post {
                 always {
@@ -37,8 +38,55 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                bat 'sh ./jenkins/scripts/deliver.sh'
             }
         }
+    }
+    post {
+        always {
+            echo 'Test run completed'
+            //cucumber buildStatus: 'UNSTABLE', failedFeaturesNumber: 999, failedScenariosNumber: 999, failedStepsNumber: 3, fileIncludePattern: '**/*.json', skippedStepsNumber: 999
+        }
+        success {
+            echo 'Successfully!'
+        }
+        failure {
+            echo 'Failed!'
+        }
+        unstable {
+            echo 'This will run only if the run was marked as unstable'
+        }
+        changed {
+            echo 'This will run only if the state of the Pipeline has changed'
+            echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+    }
+    success {
+        mail(
+            from: "jenkins@ceesiesdomain.nl",
+            to: "mohamedelwarraky8@gmail.com",
+            subject: "That build passed.",
+            body: "Nothing to see here"
+        )
+    }
+
+    failure {
+        mail(
+            from: "jenkins@ceesiesdomain.nl",
+            to: "mohamedelwarraky8@gmail.com",
+            subject: "That build failed!",
+            body: "Nothing to see here"
+            )
+    }
+
+    // The options directive is for configuration that applies to the whole job.
+    options {
+        // For example, we'd like to make sure we only keep 10 builds at a time, so
+        // we don't fill up our storage!
+        buildDiscarder(logRotator(numToKeepStr:'10'))
+
+        // And we'd really like to be sure that this build doesn't hang forever, so
+        // let's time it out after an hour.
+        timeout(time: 60, unit: 'MINUTES')
     }
 }
