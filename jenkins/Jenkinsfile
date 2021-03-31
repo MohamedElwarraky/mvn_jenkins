@@ -10,14 +10,17 @@ pipeline {
                 bat 'mvn -B clean'
             }
         }
-        stage('CompileSourceCode') {
+        stage('CompileInParallel') {
             steps {
-                bat 'mvn -B compiler:compile'
-            }
-        }
-         stage('CompileTestCode') {
-            steps {
-                bat 'mvn -B compiler:testCompile'
+                parallel(
+                       CompileSourceCode: {
+                            bat 'mvn -B compiler:compile'
+                          },
+                        CompileTestCode: {
+                            bat 'mvn -B compiler:testCompile'
+                          }
+                        )
+                
             }
         }
         stage('Build') {
