@@ -60,29 +60,18 @@ pipeline {
             echo 'For example, if the Pipeline was previously failing but is now successful'
         }
     }
-    success {
-        mail(
-            from: "jenkins@ceesiesdomain.nl",
-            to: "mohamedelwarraky8@gmail.com",
-            subject: "That build passed.",
-            body: "Nothing to see here"
-        )
-    }
-
-    failure {
-        mail(
-            from: "jenkins@ceesiesdomain.nl",
-            to: "mohamedelwarraky8@gmail.com",
-            subject: "That build failed!",
-            body: "Nothing to see here"
-            )
-    }
+    emailext (
+        subject: "Job '${env.JOB_NAME} ${env.BUILD_NUMBER}'",
+        body: """<p>Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}</a></p>""",
+        to: "mohamedelwarraky8@gmail.com",
+        from: "jenkins@code-maven.com"
+    )
 
     // The options directive is for configuration that applies to the whole job.
     options {
         // For example, we'd like to make sure we only keep 10 builds at a time, so
         // we don't fill up our storage!
-        buildDiscarder(logRotator(numToKeepStr:'10'))
+        // buildDiscarder(logRotator(numToKeepStr:'10'))
 
         // And we'd really like to be sure that this build doesn't hang forever, so
         // let's time it out after an hour.
