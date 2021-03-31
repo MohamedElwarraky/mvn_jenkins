@@ -8,12 +8,27 @@ pipeline {
     stages {
         stage('Clean') {
             steps {
-                bat 'mvn -B clean'
+                parallel(
+                    Actual: {
+                         bat 'mvn -B clean'
+                    },
+                    testing: {
+                        echo "This is branch is for testing"
+                    }
+                )
             }
         }
         stage('CompileSourceCode') {
             steps {
-                bat 'mvn -B compiler:compile'
+               parallel(
+                    Actual: {
+                         bat 'mvn -B compiler:compile'
+                    },
+                    testing: {
+                        echo "This is branch is for testing"
+                    }
+                )
+                
             }
         }
         stage('CompileTestCode') {
